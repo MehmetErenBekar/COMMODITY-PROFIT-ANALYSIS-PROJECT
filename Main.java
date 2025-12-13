@@ -22,13 +22,45 @@ public class Main {
     // ======== 10 REQUIRED METHODS (Students fill these) ========
 
     public static String mostProfitableCommodityInMonth(int month) {
-        int mostProfVal = data[month][i-28][j-4]
+        if (month < 0 || month >= 12) {
+            return "INVALID_MONTH";
+        }
 
+        int maxProfit = -2000000000;
+        String winner = "";
 
+        // Check 5 commodities one by one
+        for (int i = 0; i < 5; i++) {
+            int sum = 0;
 
-        //[month][day][(sum of all profits in for loop)]
+            // Sum profits for 28 days
+            for (int j = 0; j < 28; j++) {
+                sum = sum + data[month][j][i];
+            }
 
-        return "DUMMY";
+            // Update max profit if current is better
+            if (sum > maxProfit) {
+                maxProfit = sum;
+
+                if (i == 0) {
+                    winner = "Gold";
+                }
+                if (i == 1) {
+                    winner = "Oil";
+                }
+                if (i == 2) {
+                    winner = "Silver";
+                }
+                if (i == 3) {
+                    winner = "Wheat";
+                }
+                if (i == 4) {
+                    winner = "Copper";
+                }
+            }
+        }
+
+        return winner + " " + maxProfit;
     }
 
     public static int totalProfitOnDay(int month, int day) {
@@ -63,7 +95,7 @@ public class Main {
     }
 
     public static int biggestDailySwing(int month) {
-    
+        return 1234;
     }
 
     public static String compareTwoCommodities(String c1, String c2) {
@@ -81,3 +113,23 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
