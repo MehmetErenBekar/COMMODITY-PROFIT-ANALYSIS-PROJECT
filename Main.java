@@ -10,7 +10,6 @@ public class Main {
     static String[] months = {"January","February","March","April","May","June",
             "July","August","September","October","November","December"};
 
-    // Veri yapısı (12 Ay, 28 Gün, 5 Emtia)
     public static int[][][] data = new int[MONTHS][DAYS][COMMS];
 
 
@@ -27,50 +26,76 @@ public class Main {
         }
 
         int maxProfit = -2000000000;
-        String winner = "";
+        String bestcom = "";
 
-        // Check 5 commodities one by one
+        // check commodities
         for (int i = 0; i < 5; i++) {
             int sum = 0;
 
-            // Sum profits for 28 days
+            // sum profits for 28 days
             for (int j = 0; j < 28; j++) {
                 sum = sum + data[month][j][i];
             }
 
-            // Update max profit if current is better
+            // update max profit
             if (sum > maxProfit) {
                 maxProfit = sum;
-
-                if (i == 0) {
-                    winner = "Gold";
-                }
-                if (i == 1) {
-                    winner = "Oil";
-                }
-                if (i == 2) {
-                    winner = "Silver";
-                }
-                if (i == 3) {
-                    winner = "Wheat";
-                }
-                if (i == 4) {
-                    winner = "Copper";
-                }
+                // get name directly from the array
+                bestcom = commodities[i];
             }
         }
 
-        return winner + " " + maxProfit;
+        return bestcom + " " + maxProfit;
     }
+
+
 
     public static int totalProfitOnDay(int month, int day) {
         // [month(input)][compare all days with for loop][sum all commodities one by one with for loop]
-        return 1234;
-    }
+            if (month < 0 || month >= 12) {
+                return -99999;
+            }
+
+            if (day < 1 || day > 28) {
+                return -99999;}
+            int d = day - 1;
+            int t = 0;
+
+            // sum profits for 5 coms
+            for (int i = 0; i < 5; i++) {
+                t = t + data[month][d][i];
+            }
+            return t;
+        }
+
+
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
-        // Check all 12 months. Inside, loop from 'fromDay' to 'toDay' and add profits.
-        return 1234;
+        int c = -1;
+
+        //comm index
+        for (int i = 0; i < 5; i++) {
+            if (commodities[i].equals(commodity)) {
+                c = i;
+                break;
+            }
+        }
+
+        if (c == -1) {
+            return 0;
+        }
+
+        int t = 0;
+
+        // checkc all months
+        for (int m = 0; m < 12; m++) {
+            // Loop from start day to end day
+            for (int d = from - 1; d < to; d++) {
+                t = t + data[m][d][c];
+            }
+        }
+
+        return t;
     }
 
     public static int bestDayOfMonth(int month) {
@@ -79,8 +104,6 @@ public class Main {
     }
 
     public static String bestMonthForCommodity(String comm) {
-        // Loop 0 to 11 (months). Sum all 28 days for the specific commodity.
-        // Find the best month name.
         return "DUMMY";
     }
 
@@ -113,21 +136,6 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
