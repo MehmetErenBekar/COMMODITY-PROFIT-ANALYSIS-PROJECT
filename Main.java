@@ -40,7 +40,7 @@ public class Main {
             // update max profit
             if (sum > maxProfit) {
                 maxProfit = sum;
-                // get name directly from the array
+                // Get name directly from the array
                 bestcom = commodities[i];
             }
         }
@@ -89,7 +89,7 @@ public class Main {
 
         // checkc all months
         for (int m = 0; m < 12; m++) {
-            // Loop from start day to end day
+            // loop from start day to end day
             for (int d = from - 1; d < to; d++) {
                 t = t + data[m][d][c];
             }
@@ -98,13 +98,66 @@ public class Main {
         return t;
     }
 
-    public static int bestDayOfMonth(int month) {
-        // [check month][loop all days 0-27][inner loop: sum all 5 commodities][save the day with max profit]
-        return 1234;
-    }
+
+
+        public static int bestDayOfMonth(int month) {
+
+            if (month < 0 || month >= 12) {
+                return -1;
+            }
+
+            int max = -2000000000;
+            int bestDay = -1;
+
+            for (int d = 0; d < 28; d++) {
+                int sum = 0;
+
+                // sum al coms
+                for (int i = 0; i < 5; i++) {
+                    sum = sum + data[month][d][i];
+                }
+
+                if (sum > max) {
+                    max = sum;
+                    bestDay = d;
+                }
+            }
+
+            return bestDay + 1;
+        }
+
 
     public static String bestMonthForCommodity(String comm) {
-        return "DUMMY";
+        int c = -1;
+
+        for (int i = 0; i < 5; i++) {
+            if (commodities[i].equals(comm)) {
+                c = i;
+                break;
+            }
+        }
+
+        if (c == -1) {
+            return "INVALID";
+        }
+        int max = -2000000000;
+        int bestM = 0;
+
+        // months
+        for (int m = 0; m < 12; m++) {
+            int total = 0;
+
+            // sum days
+            for (int d = 0; d < 28; d++) {
+                total = total + data[m][d][c];
+            }
+
+            if (total > max) {
+                max = total;
+                bestM = m;
+            }
+        }
+        return months[bestM];
     }
 
     public static int consecutiveLossDays(String comm) {
@@ -113,8 +166,30 @@ public class Main {
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
-        // [check all months][check all days][if comm > threshold count++]
-        return 1234;
+        int c = -1;
+
+        // Find commodity index
+        for (int i = 0; i < 5; i++) {
+            if (commodities[i].equals(comm)) {
+                c = i;
+                break;
+            }
+        }
+        if (c == -1) {
+            return 0;
+        }
+        int count = 0;
+
+        // month loop
+        for (int m = 0; m < 12; m++) {
+            // check days
+            for (int d = 0; d < 28; d++) {
+                if (data[m][d][c] > threshold) {
+                    count = count + 1;
+                }
+            }
+        }
+        return count;
     }
 
     public static int biggestDailySwing(int month) {
@@ -122,8 +197,45 @@ public class Main {
     }
 
     public static String compareTwoCommodities(String c1, String c2) {
-        // [check all months][check all days][sum1= sum of c1 , sum2= sum of c2 then compare sum1 and sum2
-        return "DUMMY is better by 1234";
+        int com1 = -1;
+        int com2 = -1;
+
+        // decide com1
+        for (int i = 0; i < 5; i++) {
+            if (commodities[i].equals(c1)) {
+                com1 = i;
+            }
+        }
+
+        // decide com2
+        for (int i = 0; i < 5; i++) {
+            if (commodities[i].equals(c2)) {
+                com2 = i;
+            }
+        }
+
+        if (com1 == -1 || com2 == -1) {
+            return "INVALID";
+        }
+
+        int sum1 = 0;
+        int sum2 = 0;
+
+        // sum
+        for (int m = 0; m < 12; m++) {
+            for (int d = 0; d < 28; d++) {
+                sum1 = sum1 + data[m][d][com1];
+                sum2 = sum2 + data[m][d][com2];
+            }
+        }
+
+        if (sum1 > sum2) {
+            int diff = sum1 - sum2;
+            return c1 + " is better by " + diff;
+        } else {
+            int diff = sum2 - sum1;
+            return c2 + " is better by " + diff;
+        }
     }
 
     public static String bestWeekOfMonth(int month) {
@@ -136,8 +248,3 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
-
-
-
-
-
