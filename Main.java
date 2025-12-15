@@ -15,9 +15,30 @@ public class Main {
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
+        for (int m = 0; m < 12; m++) {
+            try {
+                Scanner reader = new Scanner(new File("Data_Files/" + months[m] + ".txt"));
 
-           }
+                while (reader.hasNextLine()) {
+                    String[] info = reader.nextLine().split(",");
 
+                    if (info.length == 3) {
+                        try {
+                            int d = Integer.parseInt(info[0].trim()) - 1;
+                            int c = -1;
+
+                            for (int i = 0; i < 5; i++) if (commodities[i].equals(info[1].trim())) c = i;
+
+                            if (d >= 0 && d < 28 && c != -1) {
+                                data[m][d][c] = Integer.parseInt(info[2].trim());
+                            }
+                        } catch (Exception e) { }
+                    }
+                }
+                reader.close();
+            } catch (FileNotFoundException e) { }
+        }
+    }
     // ======== 10 REQUIRED METHODS (Students fill these) ========
 
     public static String mostProfitableCommodityInMonth(int month) {
@@ -40,7 +61,6 @@ public class Main {
             // update max profit
             if (sum > maxProfit) {
                 maxProfit = sum;
-                // Get name directly from the array
                 bestcom = commodities[i];
             }
         }
@@ -52,21 +72,21 @@ public class Main {
 
     public static int totalProfitOnDay(int month, int day) {
         // [month(input)][compare all days with for loop][sum all commodities one by one with for loop]
-            if (month < 0 || month >= 12) {
-                return -99999;
-            }
-
-            if (day < 1 || day > 28) {
-                return -99999;}
-            int d = day - 1;
-            int t = 0;
-
-            // sum profits for 5 coms
-            for (int i = 0; i < 5; i++) {
-                t = t + data[month][d][i];
-            }
-            return t;
+        if (month < 0 || month >= 12) {
+            return -99999;
         }
+
+        if (day < 1 || day > 28) {
+            return -99999;}
+        int d = day - 1;
+        int t = 0;
+
+        // sum profits for 5 coms
+        for (int i = 0; i < 5; i++) {
+            t = t + data[month][d][i];
+        }
+        return t;
+    }
 
 
 
@@ -89,7 +109,7 @@ public class Main {
 
         // checkc all months
         for (int m = 0; m < 12; m++) {
-            // loop from start day to end day
+            // Loop from start day to end day
             for (int d = from - 1; d < to; d++) {
                 t = t + data[m][d][c];
             }
@@ -100,31 +120,31 @@ public class Main {
 
 
 
-        public static int bestDayOfMonth(int month) {
+    public static int bestDayOfMonth(int month) {
 
-            if (month < 0 || month >= 12) {
-                return -1;
-            }
-
-            int max = -2000000000;
-            int bestDay = -1;
-
-            for (int d = 0; d < 28; d++) {
-                int sum = 0;
-
-                // sum al coms
-                for (int i = 0; i < 5; i++) {
-                    sum = sum + data[month][d][i];
-                }
-
-                if (sum > max) {
-                    max = sum;
-                    bestDay = d;
-                }
-            }
-
-            return bestDay + 1;
+        if (month < 0 || month >= 12) {
+            return -1;
         }
+
+        int max = -2000000000;
+        int bestDay = -1;
+
+        for (int d = 0; d < 28; d++) {
+            int sum = 0;
+
+            // sum al coms
+            for (int i = 0; i < 5; i++) {
+                sum = sum + data[month][d][i];
+            }
+
+            if (sum > max) {
+                max = sum;
+                bestDay = d;
+            }
+        }
+
+        return bestDay + 1;
+    }
 
 
     public static String bestMonthForCommodity(String comm) {
@@ -248,3 +268,4 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
+
