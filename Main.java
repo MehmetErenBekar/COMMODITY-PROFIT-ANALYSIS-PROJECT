@@ -1,6 +1,7 @@
-// Main.java — Students version
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 
 public class Main {
     static final int MONTHS = 12;
@@ -91,14 +92,14 @@ public class Main {
 
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
-        int c = -1;
+        // check
+        if (from < 1 || from > 28 || to < 1 || to > 28 || from > to) {
+            return -99999;
+        }
 
-        //comm index
+        int c = -1;
         for (int i = 0; i < 5; i++) {
-            if (commodities[i].equals(commodity)) {
-                c = i;
-                break;
-            }
+            if (commodities[i].equals(commodity)) c = i;
         }
 
         if (c == -1) {
@@ -106,18 +107,14 @@ public class Main {
         }
 
         int t = 0;
-
-        // checkc all months
         for (int m = 0; m < 12; m++) {
-            // Loop from start day to end day
+            // loop all days
             for (int d = from - 1; d < to; d++) {
                 t = t + data[m][d][c];
             }
         }
-
         return t;
     }
-
 
 
     public static int bestDayOfMonth(int month) {
@@ -145,7 +142,6 @@ public class Main {
 
         return bestDay + 1;
     }
-
 
     public static String bestMonthForCommodity(String comm) {
         int c = -1;
@@ -182,13 +178,41 @@ public class Main {
 
     public static int consecutiveLossDays(String comm) {
         // [get index][loop all months and days][if profit < 0 count++ else count=0][find max]
-        return 1234;
-    }
+            int c = -1;
+            for (int i = 0; i < 5; i++) {
+                if (commodities[i].equals(comm)) c = i;
+            }
+            if (c == -1) return 0;
+
+            int maxDayCount = 0;
+            int count = 0;
+
+            // all year
+            for (int m = 0; m < 12; m++) {
+                for (int d = 0; d < 28; d++) {
+                    if (data[m][d][c] < 0) {
+                        count = count + 1;
+                    } else {
+                        if (count > maxDayCount) {
+                            maxDayCount = count;
+                        }
+                        count = 0;
+                    }
+                }
+            }
+            if (count > maxDayCount) {
+                maxDayCount = count;
+            }
+
+            return maxDayCount;
+        }
+
+
 
     public static int daysAboveThreshold(String comm, int threshold) {
         int c = -1;
 
-        // Find commodity index
+        // find commodity index
         for (int i = 0; i < 5; i++) {
             if (commodities[i].equals(comm)) {
                 c = i;
@@ -213,7 +237,31 @@ public class Main {
     }
 
     public static int biggestDailySwing(int month) {
-        return 1234;
+        if (month < 0 || month >= 12) return -1;
+
+        int max = 0;
+
+        // 27 because d+1
+        for (int d = 0; d < 27; d++) {
+            int sumToday = 0;
+            int sumTomorrow = 0;
+
+            for (int c = 0; c < 5; c++) {
+                sumToday = sumToday + data[month][d][c];
+                sumTomorrow = sumTomorrow + data[month][d+1][c];
+            }
+
+            int diff = sumToday - sumTomorrow;
+
+            if (diff < 0) {
+                diff = -diff;
+            }
+
+            if (diff > max) {
+                max = diff;
+            }
+        }
+        return max;
     }
 
     public static String compareTwoCommodities(String c1, String c2) {
@@ -260,7 +308,29 @@ public class Main {
 
     public static String bestWeekOfMonth(int month) {
         //[get month][compare sum of days like [0-7],[8-13]] [sum all commodities]
-        return "DUMMY";
+
+        if (month < 0 || month >= 12) return "INVALID";
+
+        int maxWeekProfit = -2000000000;
+        int bestWeek = -1;
+
+        for (int w = 0; w < 4; w++) {
+            int currentWeekSum = 0;
+            int startDay = w * 7;
+
+            for (int d = startDay; d < startDay + 7; d++) {
+                for (int c = 0; c < 5; c++) {
+                    currentWeekSum = currentWeekSum + data[month][d][c];
+                }
+            }
+
+            if (currentWeekSum > maxWeekProfit) {
+                maxWeekProfit = currentWeekSum;
+                bestWeek = w;
+            }
+        }
+
+        return "Week " + (bestWeek + 1);
     }
 
     public static void main(String[] args) {
@@ -268,4 +338,3 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
-
